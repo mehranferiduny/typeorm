@@ -3,7 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
-import { ILike, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
+import { And, FindOneOptions, FindOptionsWhere, ILike, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
+import { isDate } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -24,12 +25,26 @@ export class UserService {
     })
   }
 
-  async findAll() {
+  async findAll(search:string) {
+
+    let where:FindOptionsWhere<UserEntity>={}
+
+
+     if(search && isDate(new Date(search))){
+
+      let date=new Date(search);
+      let start_at=new Date(date.setUTCHours(0,0,0))
+      let finsh_at=new Date(date.setUTCHours(23,59,59))
+
+      where['created_at']=And(MoreThanOrEqual(start_at),LessThanOrEqual(finsh_at))
+     }
+
+
     return await this.userRepository.find({
       //! ILIKE Like
       //! NOT
       //! MoreThan  MoreThanOrEqual LessThan  LessThanOrEqual
-      where:{id:LessThanOrEqual(4)}
+      where:where
     });
   }
 
