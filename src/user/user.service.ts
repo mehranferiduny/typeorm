@@ -48,6 +48,12 @@ export class UserService {
     });
   }
 
+ async order() {
+    return await this.userRepository.find({
+      where:{},
+      order:{f_name:"DESC"}
+    });
+  }
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
