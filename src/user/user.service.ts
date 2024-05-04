@@ -66,6 +66,13 @@ export class UserService {
       skip
     });
   }
+ async select() {
+  
+    return await this.userRepository.find({
+      where:{},
+     select:["f_name","age"]
+    });
+  }
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }

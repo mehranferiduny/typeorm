@@ -15,7 +15,7 @@ export class UserEntity {
   @Column()
   email:string;
 
-  @Column({nullable:true})
+  @Column({nullable:true,select:false})
   age:number;
 
   @CreateDateColumn()

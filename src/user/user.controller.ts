@@ -30,6 +30,10 @@ export class UserController {
   pagenav(@Query() pageniton:PagenavitonDto) {
     return this.userService.pageNav(pageniton);
   }
+  @Get('/select')
+  selectuser() {
+    return this.userService.select();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
