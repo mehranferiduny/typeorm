@@ -1,3 +1,4 @@
+import { isEmail } from "class-validator";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:"user"})

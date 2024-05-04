@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { And, FindOneOptions, FindOptionsWhere, ILike, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
-import { isDate } from 'class-validator';
+import { isDate, isEmail } from 'class-validator';
 import { PagenavitonDto } from './dto/pagenav-user.dto';
 
 @Injectable()
@@ -73,12 +73,33 @@ export class UserService {
      select:["f_name","age"]
     });
   }
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+ async findOne(id: number) {
+    
+    const user= await this.userRepository.findOneBy({id});
+    if(!user) throw new NotFoundException();
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.findOne(id);
+   
+    await this.userRepository.update({id},updateUserDto);
+    return {
+      message:"update succesfuly"
+    }
+  }
+  async updateuser(id: number, updateUserDto: UpdateUserDto) {
+    const userx =await this.findOne(id);
+   const {age,email,f_name,l_name}=updateUserDto;
+   if(age) userx.age=age;
+   if(email && isEmail(email)) userx.email=email;
+   if(f_name)userx.f_name=f_name;
+   if(l_name)userx.l_name=l_name
+  
+    await this.userRepository.save(userx);
+    return {
+      message:"update succesfuly"
+    }
   }
 
   remove(id: number) {
