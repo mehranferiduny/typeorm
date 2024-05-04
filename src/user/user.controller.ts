@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PagenavitonDto } from './dto/pagenav-user.dto';
 
 
 @Controller('user')
@@ -24,6 +25,10 @@ export class UserController {
   @Get('/order')
   order() {
     return this.userService.order();
+  }
+  @Get('/pagenav')
+  pagenav(@Query() pageniton:PagenavitonDto) {
+    return this.userService.pageNav(pageniton);
   }
 
   @Get(':id')

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { And, FindOneOptions, FindOptionsWhere, ILike, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import { isDate } from 'class-validator';
+import { PagenavitonDto } from './dto/pagenav-user.dto';
 
 @Injectable()
 export class UserService {
@@ -54,6 +55,17 @@ export class UserService {
       order:{f_name:"DESC"}
     });
   }
+
+
+ async pageNav(pagenav:PagenavitonDto) {
+  const {skip,limited,page}=this.pageNavigtin(pagenav);
+    return await this.userRepository.find({
+      where:{},
+      order:{id:"ASC"},
+      take:limited,
+      skip
+    });
+  }
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
@@ -64,6 +76,19 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+
+  pageNavigtin(pagenav:PagenavitonDto){
+    let{page=0,limited=3}=pagenav;
+    if(!page || page <=1) page=0;
+    else page= page-1;
+    if(!limited || limited<=0) limited=3
+    return {
+      page,
+      limited,
+      skip:page*limited
+    }
   }
 }
 
