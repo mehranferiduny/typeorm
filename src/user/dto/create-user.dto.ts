@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Unique } from "typeorm";
 
 export class CreateUserDto {
   @IsString()

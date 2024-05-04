@@ -47,6 +47,7 @@ export class UserService {
       //! MoreThan  MoreThanOrEqual LessThan  LessThanOrEqual
       where:where
     });
+  
   }
 
  async order() {
@@ -102,8 +103,19 @@ export class UserService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user=await this.findOne(id);
+    await this.userRepository.remove(user)
+    return{
+      message:"deleted suceces fully"
+     }
+  }
+ async delete(id: number) {
+     await this.findOne(id)
+     await this.userRepository.delete({id})
+     return{
+      message:"deleted suceces fully"
+     }
   }
 
 
