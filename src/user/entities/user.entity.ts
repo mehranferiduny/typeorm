@@ -1,5 +1,6 @@
 import { isEmail } from "class-validator";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BlogEntity } from "src/blog/entities/blog.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:"user"})
 export class UserEntity {
@@ -21,4 +22,7 @@ export class UserEntity {
 
   @CreateDateColumn()
   created_at:Date
+
+  @OneToMany(()=>BlogEntity,blog=>blog.user)
+  blogs:BlogEntity[]
 }
