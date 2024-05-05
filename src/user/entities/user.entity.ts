@@ -1,6 +1,7 @@
 import { isEmail } from "class-validator";
 import { BlogEntity } from "src/blog/entities/blog.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ProflieEntity } from "./profile.entity";
 
 @Entity({name:"user"})
 export class UserEntity {
@@ -25,4 +26,11 @@ export class UserEntity {
 
   @OneToMany(()=>BlogEntity,blog=>blog.user)
   blogs:BlogEntity[]
+
+  @Column({nullable:true})
+  profileId:number;
+  
+  @OneToOne(()=>ProflieEntity,profile=>profile.user,{onDelete:'SET NULL',nullable:true})
+  @JoinColumn({name:"profileId"})
+  profile:ProflieEntity;
 }

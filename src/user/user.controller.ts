@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Query, Put, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -38,6 +38,10 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
+  }
+  @Get('/blogs/:userid')
+  blogofUser(@Param('userid',ParseIntPipe) userid: number) {
+    return this.userService.blogOfUser(userid);
   }
 
   @Patch(':id')

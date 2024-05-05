@@ -56,6 +56,14 @@ export class UserService {
       order:{f_name:"DESC"}
     });
   }
+ async blogOfUser(id:number) {
+    return await this.userRepository.findOne({
+      where:{id},
+      relations:{
+        blogs:true,
+      }
+    });
+  }
 
 
  async pageNav(pagenav:PagenavitonDto) {
