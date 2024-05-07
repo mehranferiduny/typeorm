@@ -44,6 +44,11 @@ export class UserController {
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
+
+  @Get('/profile/:id')
+  findProfileWithUser(@Param('id') id: string) {
+    return this.userService.findProfileWithUser(+id);
+  }
   @Get('/blogs/:userid')
   blogofUser(@Param('userid',ParseIntPipe) userid: number) {
     return this.userService.blogOfUser(userid);

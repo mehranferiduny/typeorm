@@ -175,5 +175,24 @@ export class UserService {
 
 
   }
+
+  async findProfileWithUser(id: number) {
+    
+    const user= await this.userRepository.findOne({
+      where:{id},
+      relations:{
+        profile:true
+      },
+      select:{
+        profile:{
+          bio:true,
+          photo:true
+        }
+      }
+    });
+    if(!user) throw new NotFoundException();
+    return user;
+  }
+
 }
 
