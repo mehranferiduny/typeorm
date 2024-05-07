@@ -33,6 +33,7 @@ export class UserController {
   }
   @Get('/pagenav')
   pagenav(@Query() pageniton:PagenavitonDto) {
+    console.log(pageniton)
     return this.userService.pageNav(pageniton);
   }
   @Get('/select')
