@@ -6,11 +6,14 @@ import { UserEntity } from './entities/user.entity';
 import { And, FindOneOptions, FindOptionsWhere, ILike, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import { isDate, isEmail } from 'class-validator';
 import { PagenavitonDto } from './dto/pagenav-user.dto';
+import { ProflieEntity } from './entities/profile.entity';
+import { ProfileUserDto } from './dto/profile-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity) private userRepository:Repository<UserEntity>
+    @InjectRepository(UserEntity) private userRepository:Repository<UserEntity>,
+    @InjectRepository(ProflieEntity) private profileRepository:Repository<ProflieEntity>
   ){}
  async create(createUserDto: CreateUserDto) {
   const {f_name,l_name,email,age}=createUserDto;
@@ -137,6 +140,40 @@ export class UserService {
       limited,
       skip:page*limited
     }
+  }
+
+
+  async profileCreated (profileDto:ProfileUserDto){
+   const {bio,photo,userId}=profileDto;
+
+   try {
+    const user=await this.userRepository.findOneBy({id:userId})
+    if(!user) throw new NotFoundException();
+    const profile=await this.profileRepository.findOneBy({userId});
+
+    if(profile){
+    if(bio) profile.bio=bio;
+    if(photo) profile.photo=photo;
+    await this.profileRepository.save(profile)
+    return{
+      message:"profile update sucsesfuly"
+    }
+    }else{
+      const newProfile= this.profileRepository.create({bio,photo,userId})
+      await this.profileRepository.save(newProfile)
+      user.profileId=newProfile.id;
+      await this.userRepository.save(user)
+      return{
+        message:"profile created sucsesfuly"
+      }
+    }
+   } catch (err) {
+    console.log(err)
+   }
+
+
+
+
   }
 }
 

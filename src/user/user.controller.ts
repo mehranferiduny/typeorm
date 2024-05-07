@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PagenavitonDto } from './dto/pagenav-user.dto';
+import { ProfileUserDto } from './dto/profile-user.dto';
 
 
 @Controller('user')
@@ -16,6 +17,10 @@ export class UserController {
   @Post('/insert')
   insert(@Body() createUserDto: CreateUserDto) {
     return this.userService.insert(createUserDto);
+  }
+  @Post('/profile')
+  profilecreated(@Body() profileUserDto: ProfileUserDto) {
+    return this.userService.profileCreated(profileUserDto);
   }
 
   @Get()
